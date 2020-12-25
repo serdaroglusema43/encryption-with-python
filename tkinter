@@ -1,0 +1,145 @@
+from tkinter import *
+
+pencere = Tk()
+pencere.title("Pi degerine dayali sifreleme")
+pencere.geometry("600x600+900+300")
+pencere.configure(background="#dcc8de")
+
+
+yazi = Label(text = "Metin Giriniz:",font="Times 13 bold",bg="#dcc8de")
+yazi.pack(side = "top")
+yazi = Entry()
+yazi.pack()
+
+pi = Label(text="Pi Değeri", font="Times 10 bold",bg="#dcc8de" )
+pi.place(relx=0.1, rely=0.2)
+
+sezar = Label(text="Sezar", font="Times 10 bold",bg="#dcc8de")
+sezar.place(relx=0.55, rely=0.2)
+
+rasgele = Label(text="Rasgele", font="Times 10 bold",bg="#dcc8de")
+rasgele.place(relx=0.85, rely=0.2)
+
+
+pi = ['3', '1', '4', '1', '5', '9', '2', '6', '5', '3', '5', '8', '9', '7', '9', '3', '2', '3', '8', '4', '6', '2', '6', '4', '3', '3']
+tekrar = ['1', '1', '1', '2', '1', '1', '1', '1', '2', '2', '3', '1', '2', '1', '3', '3', '2', '4', '2', '2', '2', '3', '3', '3', '5', '6']
+alfabe = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+harfler ={
+    '31':'a','11':'b','41':'c',
+    '12':'d','51':'e','91':'f',
+    '21':'g','61':'h','52':'i',
+    '32':'j','53':'k','81':'l',
+    '92':'m','71':'n','93':'o',
+    '33':'p','22':'q','34':'r',
+    '82':'s','42':'t','62':'u',
+    '23':'v','63':'w','43':'x',
+    '35':'y','36':'z'
+    }
+liste = dict()
+
+def piSirele():
+
+    for i in range(0, 26):
+        liste.setdefault(alfabe[i],pi[i] + tekrar[i]) # setdefault() methodu ile harfleri anahtar:deger olarak sozluge cevirdik.
+                                                        # for oge,deger in liste.items():  # sozlukteki verileri donduruyoruz
+                                                        # print(oge+"=>"+deger)
+    sifrele = ""
+    for i in yazi.get():
+        sifrele = sifrele + liste.get(i)   # girilen metindeki harfleri for dongusu ile alarak listeye atadıgımız sozlukteki key degerine gore
+                                           # (get metodu) value degerlerini aliyoruz
+                                           # sifrele degiskenine atiyoruz
+    etiket["text"] = sifrele;              # etiket label ine sifreyi yazdık
+
+buton1 = Button(
+    text = "Pi Sifrele",
+    command = piSirele,
+    padx=20,
+    pady=10,
+    bg="#6f1e77"
+    )
+
+buton1.place(relx=0.0,rely=0.3)  #buton konumlandırdık
+
+def piCoz():
+    coz = ""                             # Burada şifreyi çözeceğimiz stringi tanımlıyoruz
+    a = len(yazi.get())                  # Girdiğimiz yazının uzunluğunu alıyoruz
+    yazi1 = str(yazi.get())              # Girdiğimiz yazıyı yeni bir stringe atıyoruz bu string üzerinde çalışacağız
+    for i in range(0,a,2):              # 2şer 2şer çeviriyoruz çünkü şifrelerimizin her harfini 2li kodlamıştık
+        sifre = "" #şifreyi tanımlıyoruz her seferinde sıfırlıyoruz çünkü bir alt satırda her bir ikilinin farklı bir şifresi olacak ve o şifreyi her ikilide yeniden bakmamız lazım
+        sifre = yazi1[i] + yazi1[i + 1]  # her bir ikilinin girdiğimiz yazının şifresine atayacağzı mesela 3131 diye girdik önce 3 sonra 1'i alıyoruz ve bunu şifreye atıyoruz
+        coz = coz + harfler[sifre]       # dic tipinde harfler isminde  sözlük oluşturduk sifre olan 31 neye denk geliyorsa onun karşılığını yazıp çözümün yani coze ekliyoruz
+    etiket["text"] = coz
+
+buton2 = Button(
+    text = "Pi Coz",
+    command = piCoz,
+    padx=20,
+    pady=10,
+    bg="#7f2687"
+)
+buton2.place(relx=0.2,rely=0.3)
+
+def sezarSifrele():
+    sifre = ""  # sifre degiskenini tanimladik
+    for i in yazi.get():
+        sifre += alfabe[
+            (alfabe.index(i) + 3) % len(alfabe)]  # indekse uc ekleyip alfabe bir attirilip sifreye atanir
+    etiket["text"] = sifre                        # etiket label ine sifreyi yazdık
+
+buton3 = Button(
+        text="Sezar Sifrele",
+        command = sezarSifrele,
+        padx=20,
+        pady=10,
+        bg="#93319c"
+    )
+buton3.place(relx=0.4,rely=0.3)                  #buton konumlandırdık
+
+def sezarCoz():
+    sifre = ""
+    for i in yazi.get():
+        sifre += alfabe[
+            (alfabe.index(i) - 3) % len(alfabe)]  # indekten uc cikarilip alfabe bir artilirip sifreye atanir.
+    etiket["text"] = sifre                       # etiket label ine sifreyi yazdık
+
+buton4 = Button(
+        text="Sezar Coz",
+        command = sezarCoz,
+        padx=20,
+        pady=10,
+        bg="#ab3eb5"
+    )
+buton4.place(relx=0.6,rely=0.3)                   #buton konumlandırdık
+
+
+
+def rasgele():
+    from random import choice  # rastgele degerler icin kutuphane
+
+    karakter = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','r','s','t','u','v','y','z','w','x',
+                0,1,2,3,4,5,6,7,8,9,
+                '!','^','^','+','%','&','/','(',')','=','?','_','#','$','{','[',']','}','|','@','*','.',',','<','>','-','+']
+
+    sifre = ""
+    for i in range(0,7):
+        sifre += str(choice(karakter))
+
+    etiket["text"] = sifre;                           # etiket label ine sifreyi yazdık
+
+buton5 = Button(
+        text="Rasgele",
+        command = rasgele,
+        padx=20,
+        pady=10,
+        bg="#bf4dca"
+    )
+buton5.place(relx=0.8,rely=0.3)                       #buton konumlandırdık
+
+etiket = Label(text="",bg="#dcc8de")  #sonuclar etiket  label'ine yazılır
+etiket.place(relx=0.6,rely=0.5)
+
+sonuc = Label(text="Cikti:",font="Times 13 bold",bg="#dcc8de")
+sonuc.place(relx=0.4,rely=0.5)
+
+
+mainloop()
